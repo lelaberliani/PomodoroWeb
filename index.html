@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pomodoro - Focus. Work. Achieve.</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login Screen -->
+  <div id="loginScreen" class="screen active">
+    <div class="login-container">
+      <div class="login-content">
+        <div class="login-header">
+          <div class="logo-section">
+            <div class="logo-icon">
+              <svg class="clock-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2" />
+                <path d="M12 7 L12 12 L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <h1 class="logo-text">POMODORO</h1>
+          </div>
+          <h2 class="hero-title">Focus. Work. Achieve.</h2>
+          <p class="hero-subtitle">Master Your Time</p>
+          <p class="hero-description">
+            A futuristic Pomodoro app designed to help you focus, manage tasks, and track your productivity with elegance.
+          </p>
+        </div>
+
+        <form id="loginForm" class="login-form">
+          <div class="form-group">
+            <input
+              type="text"
+              id="username"
+              placeholder="Username"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              class="form-input"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-primary btn-large">
+            Start Your Focus Session
+          </button>
+        </form>
+
+        <p class="login-footer">No backend required - all data stored locally</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="mainApp" class="screen">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <div class="logo-icon">
+            <svg class="clock-icon-small" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2" />
+              <path d="M12 7 L12 12 L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="logo-text-small">POMODORO</span>
+        </div>
+
+        <div class="nav-tabs">
+          <button class="nav-tab active" data-tab="home">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Home</span>
+          </button>
+          <button class="nav-tab" data-tab="timer">
+            <span class="nav-icon">⏱️</span>
+            <span class="nav-label">Timer</span>
+          </button>
+          <button class="nav-tab" data-tab="tasks">
+            <span class="nav-icon">✓</span>
+            <span class="nav-label">Tasks</span>
+          </button>
+          <button class="nav-tab" data-tab="statistics">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Statistics</span>
+          </button>
+          <button class="nav-tab" data-tab="leaderboard">
+            <span class="nav-icon">🏆</span>
+            <span class="nav-label">Leaderboard</span>
+          </button>
+        </div>
+
+        <div class="nav-user">
+          <div class="user-info">
+            <div class="user-avatar">
+              <span id="userInitial">U</span>
+            </div>
+            <span id="navUsername" class="username">User</span>
+          </div>
+          <button id="logoutBtn" class="btn-logout">
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Home Tab -->
+      <div id="homeTab" class="tab-content active">
+        <div class="hero-section">
+          <div class="hero-glow"></div>
+          <div class="hero-content-wrapper">
+            <div class="status-badge">
+              <span class="pulse-dot"></span>
+              Boost Your Productivity
+            </div>
+            <h1 class="hero-main-title">Focus. Work. Achieve.</h1>
+            <h2 class="hero-gradient-title">Master Your Time</h2>
+            <p class="hero-text">
+              A futuristic Pomodoro app designed to help you focus, manage tasks, and track your productivity with elegance.
+            </p>
+          </div>
+        </div>
+
+        <div class="dashboard-container">
+          <div class="profile-card">
+            <div class="profile-content">
+              <div class="profile-avatar-wrapper">
+                <div class="profile-avatar">
+                  <span id="profileInitial">U</span>
+                </div>
+                <div class="online-indicator"></div>
+              </div>
+
+              <div class="profile-info">
+                <h3 id="profileUsername" class="profile-name">User</h3>
+                <p class="profile-title">Productivity Champion</p>
+
+                <div class="stats-grid">
+                  <div class="stat-card stat-blue">
+                    <div class="stat-header">
+                      <span class="stat-icon">⏰</span>
+                      <span class="stat-label">Weekly Focus Time</span>
+                    </div>
+                    <p id="weeklyTime" class="stat-value">0h 0m</p>
+                  </div>
+                  <div class="stat-card stat-purple">
+                    <div class="stat-header">
+                      <span class="stat-icon">🏆</span>
+                      <span class="stat-label">Focus Points</span>
+                    </div>
+                    <p id="focusPoints" class="stat-value">0</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Tab -->
+      <div id="timerTab" class="tab-content">
+        <div class="timer-container">
+          <div class="timer-card">
+            <div class="timer-header">
+              <h2>Pomodoro Timer</h2>
+              <button id="settingsBtn" class="icon-btn">⚙️</button>
+            </div>
+
+            <div id="settingsPanel" class="settings-panel">
+              <h3>Timer Settings</h3>
+              <div class="settings-form">
+                <div class="form-group">
+                  <label>Focus Duration (minutes)</label>
+                  <input type="number" id="focusDuration" class="form-input" value="25" min="1">
+                </div>
+                <div class="form-group">
+                  <label>Break Duration (minutes)</label>
+                  <input type="number" id="breakDuration" class="form-input" value="5" min="1">
+                </div>
+                <div class="form-group">
+                  <label>Total Sessions</label>
+                  <input type="number" id="totalSessions" class="form-input" value="4" min="1">
+                </div>
+                <button id="applySettings" class="btn-primary">Apply Settings</button>
+              </div>
+            </div>
+
+            <div id="activeTaskDisplay" class="active-task-display" style="display: none;">
+              <p class="active-task-label">Active Task</p>
+              <p id="activeTaskName" class="active-task-name"></p>
+            </div>
+
+            <div class="timer-display">
+              <svg class="timer-ring" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
+                <circle id="progressRing" cx="100" cy="100" r="90" fill="none" stroke="url(#gradient)" stroke-width="12" 
+                  stroke-dasharray="565.48" stroke-dashoffset="565.48" stroke-linecap="round" 
+                  transform="rotate(-90 100 100)" class="progress-ring"/>
+                <defs>
+                  <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#4f9cf9" />
+                    <stop offset="100%" stop-color="#9f7aea" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="timer-text">
+                <p id="timerDisplay" class="timer-time">25:00</p>
+                <p id="timerMode" class="timer-label">Focus Time</p>
+              </div>
+            </div>
+
+            <div id="sessionIndicators" class="session-indicators"></div>
+
+            <p id="sessionCounter" class="session-counter">Session 1 of 4</p>
+
+            <div class="timer-controls">
+              <button id="startBtn" class="btn-primary btn-timer">
+                <span>▶</span> Start
+              </button>
+              <button id="pauseBtn" class="btn-secondary btn-timer" style="display: none;">
+                <span>⏸</span> Pause
+              </button>
+              <button id="resetBtn" class="btn-outline btn-timer">
+                <span>↻</span> Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tasks Tab -->
+      <div id="tasksTab" class="tab-content">
+        <div class="tasks-container">
+          <div class="tasks-header">
+            <h2>Task Management</h2>
+            <button id="addTaskBtn" class="btn-primary">
+              <span>+</span> Add Task
+            </button>
+          </div>
+
+          <div id="taskForm" class="task-form" style="display: none;">
+            <h3 id="formTitle">New Task</h3>
+            <form id="taskFormElement">
+              <div class="form-group">
+                <label>Task Title</label>
+                <input type="text" id="taskTitle" class="form-input" placeholder="Enter task title..." required>
+              </div>
+              <div class="form-group">
+                <label>Description (optional)</label>
+                <textarea id="taskDescription" class="form-input" placeholder="Add task details..." rows="3"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">Add Task</button>
+                <button type="button" id="cancelTaskBtn" class="btn-outline">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <div id="tasksList" class="tasks-list"></div>
+        </div>
+      </div>
+
+      <!-- Statistics Tab -->
+      <div id="statisticsTab" class="tab-content">
+        <div class="statistics-container">
+          <h2>Statistics</h2>
+
+          <div class="summary-cards">
+            <div class="summary-card">
+              <div class="summary-icon blue">⏰</div>
+              <div>
+                <p class="summary-label">Total Focus Time</p>
+                <p id="statTotalTime" class="summary-value">0h 0m</p>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon purple">📈</div>
+              <div>
+                <p class="summary-label">Daily Average</p>
+                <p id="statAverage" class="summary-value">0h 0m</p>
+              </div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-icon green">✓</div>
+              <div>
+                <p class="summary-label">Completed Tasks</p>
+                <p id="statCompleted" class="summary-value">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <h3>Weekly Focus Time</h3>
+            <div id="chartContainer" class="chart-container"></div>
+          </div>
+
+          <div id="insightsContainer" class="insights-container"></div>
+        </div>
+      </div>
+
+      <!-- Leaderboard Tab -->
+      <div id="leaderboardTab" class="tab-content">
+        <div class="leaderboard-container">
+          <div class="leaderboard-header">
+            <span class="leaderboard-icon">🏆</span>
+            <h2>Weekly Leaderboard</h2>
+          </div>
+          <p class="leaderboard-subtitle">Rankings based on total focus time</p>
+
+          <div id="podium" class="podium"></div>
+
+          <div class="leaderboard-table-container">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>User</th>
+                  <th>Focus Time</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardBody"></tbody>
+            </table>
+          </div>
+
+          <div class="points-info">
+            <p><span class="highlight">Points are calculated</span> proportionally to focus time: 1 point per minute</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
