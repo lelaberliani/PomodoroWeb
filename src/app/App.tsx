@@ -6,6 +6,8 @@ import { PomodoroTimer } from './components/PomodoroTimer';
 import { TaskManager } from './components/TaskManager';
 import { Statistics } from './components/Statistics';
 import { Leaderboard } from './components/Leaderboard';
+import Footer from './components/footer';
+import ScrollToTop from './scrolToTop';
 
 interface Task {
   id: string;
@@ -105,7 +107,7 @@ export default function App() {
 
   const handleFocusComplete = (minutes: number) => {
     const today = new Date().toISOString().split('T')[0];
-    
+
     // Add focus session
     const newSession: FocusSession = {
       date: today,
@@ -133,7 +135,7 @@ export default function App() {
     focusSessions.forEach((session) => {
       const sessionDate = new Date(session.date);
       const daysDiff = Math.floor((sessionDate.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24));
-      
+
       if (daysDiff >= 0 && daysDiff < 7) {
         weekData[daysDiff].minutes += session.minutes;
       }
@@ -176,53 +178,65 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f111a] via-[#1a1d2e] to-[#0f111a]">
-      <Navigation
-        activeTab={activeTab}
-        onTabChange={setActiveTab}
-        username={username}
-        onLogout={handleLogout}
-      />
+  <div className="min-h-screen bg-gradient-to-br from-[#0f111a] via-[#1a1d2e] to-[#0f111a]">
+    
+    {/* 🔥 INI YANG KAMU LUPA */}
+    <ScrollToTop activeTab={activeTab} />
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
-        {activeTab === 'home' && (
-          <Dashboard
-            username={username}
-            weeklyFocusTime={totalWeeklyMinutes}
-            focusPoints={focusPoints}
-          />
-        )}
+    <Navigation
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+      username={username}
+      onLogout={handleLogout}
+    />
 
-        {activeTab === 'timer' && (
-          <PomodoroTimer
-            onFocusComplete={handleFocusComplete}
-            activeTask={activeTask?.title || null}
-          />
-        )}
+    <main className="max-w-7xl mx-auto px-6 py-8">
+      {activeTab === 'home' && (
+        <Dashboard
+          username={username}
+          weeklyFocusTime={totalWeeklyMinutes}
+          focusPoints={focusPoints}
+        />
+      )}
 
-        {activeTab === 'tasks' && (
-          <TaskManager
-            tasks={tasks}
-            onAddTask={handleAddTask}
-            onEditTask={handleEditTask}
-            onDeleteTask={handleDeleteTask}
-            activeTaskId={activeTaskId}
-            onSetActiveTask={setActiveTaskId}
-          />
-        )}
+      {activeTab === 'timer' && (
+        <PomodoroTimer
+          onFocusComplete={handleFocusComplete}
+          activeTask={activeTask?.title || null}
+        />
+      )}
 
-        {activeTab === 'statistics' && (
-          <Statistics
-            weeklyData={weeklyData}
-            totalWeeklyMinutes={totalWeeklyMinutes}
-            completedTasks={completedTasks}
-          />
-        )}
+      {activeTab === 'tasks' && (
+        <TaskManager
+          tasks={tasks}
+          onAddTask={handleAddTask}
+          onEditTask={handleEditTask}
+          onDeleteTask={handleDeleteTask}
+          activeTaskId={activeTaskId}
+          onSetActiveTask={setActiveTaskId}
+        />
+      )}
 
-        {activeTab === 'leaderboard' && (
-          <Leaderboard currentUser={username} leaderboardData={getLeaderboardData()} />
-        )}
-      </main>
-    </div>
-  );
+      {activeTab === 'statistics' && (
+        <Statistics
+          weeklyData={weeklyData}
+          totalWeeklyMinutes={totalWeeklyMinutes}
+          completedTasks={completedTasks}
+        />
+      )}
+
+      {activeTab === 'leaderboard' && (
+        <Leaderboard
+          currentUser={username}
+          leaderboardData={getLeaderboardData()}
+        />
+      )}
+    </main>
+
+    <Footer
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+    />
+  </div>
+);
 }

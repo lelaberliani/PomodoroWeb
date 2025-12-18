@@ -66,9 +66,6 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
           </button>
         </form>
 
-        <p className="text-center text-gray-500 text-sm mt-8">
-          No backend required - all data stored locally
-        </p>
       </div>
     </div>
   );

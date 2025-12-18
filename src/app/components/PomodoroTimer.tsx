@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
+import SoundAlarm from '../../../public/sounds/alarm.mp3';
 
 interface PomodoroTimerProps {
   onFocusComplete: (minutes: number) => void;
@@ -15,48 +16,76 @@ export function PomodoroTimer({ onFocusComplete, activeTask }: PomodoroTimerProp
   const [isFocusMode, setIsFocusMode] = useState(true);
   const [timeLeft, setTimeLeft] = useState(focusDuration * 60);
   const [showSettings, setShowSettings] = useState(false);
-  
+  const [userInteracted, setUserInteracted] = useState(false);
+
   const intervalRef = useRef<number | null>(null);
+  const alarmRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (isRunning && timeLeft > 0) {
-      intervalRef.current = window.setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    } else if (timeLeft === 0) {
-      handleSessionComplete();
+    alarmRef.current = new Audio(SoundAlarm);
+    alarmRef.current.volume = 1.0;
+  }, []);
+
+  const playAlarm = () => {
+    if (userInteracted) {  // Perbaikan: Hanya mainkan alarm jika pengguna sudah berinteraksi (setelah klik Start)
+      alarmRef.current?.play().catch((e) => {
+        console.log("Audio blocked or error:", e);
+      });
     }
+  };
+
+  useEffect(() => {
+    if (!isRunning) return;
+
+    intervalRef.current = window.setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(intervalRef.current!);
+          handleSessionComplete();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isRunning, timeLeft]);
+  }, [isRunning]);
 
   const handleSessionComplete = () => {
+    playAlarm();  // Alarm akan dimainkan di sini saat sesi selesai, asalkan userInteracted true
     setIsRunning(false);
-    
+
     if (isFocusMode) {
-      // Focus session completed
+      // Fokus selesai
       onFocusComplete(focusDuration);
-      
+
       if (currentSession < totalSessions) {
-        // Switch to break
         setIsFocusMode(false);
         setTimeLeft(breakDuration * 60);
+
+        // AUTO START BREAK
+        setTimeout(() => setIsRunning(true), 500);
       } else {
-        // All sessions complete
+        // Semua sesi selesai
         setCurrentSession(1);
+        setIsFocusMode(true);
         setTimeLeft(focusDuration * 60);
       }
     } else {
-      // Break completed
-      setCurrentSession(currentSession + 1);
+      // Break selesai
+      setCurrentSession((prev) => prev + 1);
       setIsFocusMode(true);
       setTimeLeft(focusDuration * 60);
+
+      // AUTO START FOCUS
+      setTimeout(() => setIsRunning(true), 500);
     }
   };
 
   const handleStart = () => {
+    setUserInteracted(true);  // Set flag interaksi saat Start diklik
     setIsRunning(true);
   };
 
@@ -69,6 +98,9 @@ export function PomodoroTimer({ onFocusComplete, activeTask }: PomodoroTimerProp
     setIsFocusMode(true);
     setCurrentSession(1);
     setTimeLeft(focusDuration * 60);
+
+    alarmRef.current?.pause();
+    if (alarmRef.current) alarmRef.current.currentTime = 0;
   };
 
   const applySettings = () => {
@@ -106,7 +138,7 @@ export function PomodoroTimer({ onFocusComplete, activeTask }: PomodoroTimerProp
         {showSettings && (
           <div className="mb-8 p-6 bg-blue-500/5 border border-blue-500/20 rounded-xl space-y-4">
             <h3 className="text-white mb-4">Timer Settings</h3>
-            
+
             <div>
               <label className="text-gray-400 text-sm block mb-2">Focus Duration (minutes)</label>
               <input
@@ -206,13 +238,12 @@ export function PomodoroTimer({ onFocusComplete, activeTask }: PomodoroTimerProp
           {Array.from({ length: totalSessions }).map((_, index) => (
             <div
               key={index}
-              className={`w-12 h-2 rounded-full transition-all ${
-                index + 1 < currentSession
-                  ? 'bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg shadow-blue-500/30'
-                  : index + 1 === currentSession
+              className={`w-12 h-2 rounded-full transition-all ${index + 1 < currentSession
+                ? 'bg-gradient-to-r from-blue-500 to-purple-600 shadow-lg shadow-blue-500/30'
+                : index + 1 === currentSession
                   ? 'bg-gradient-to-r from-blue-400 to-purple-500 shadow-lg shadow-blue-500/50'
                   : 'bg-white/10'
-              }`}
+                }`}
             />
           ))}
         </div>
@@ -241,7 +272,7 @@ export function PomodoroTimer({ onFocusComplete, activeTask }: PomodoroTimerProp
               Pause
             </button>
           )}
-          
+
           <button
             onClick={handleReset}
             className="px-8 py-4 bg-white/5 border border-white/10 text-white rounded-xl hover:bg-white/10 transition-all flex items-center gap-3"
