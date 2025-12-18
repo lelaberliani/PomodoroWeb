@@ -178,65 +178,65 @@ export default function App() {
   }
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-[#0f111a] via-[#1a1d2e] to-[#0f111a]">
-    
-    {/* 🔥 INI YANG KAMU LUPA */}
-    <ScrollToTop activeTab={activeTab} />
+    <div className="min-h-screen bg-gradient-to-br from-[#0f111a] via-[#1a1d2e] to-[#0f111a]">
 
-    <Navigation
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-      username={username}
-      onLogout={handleLogout}
-    />
+      {/* 🔥 INI YANG KAMU LUPA */}
+      <ScrollToTop activeTab={activeTab} />
 
-    <main className="max-w-7xl mx-auto px-6 py-8">
-      {activeTab === 'home' && (
-        <Dashboard
-          username={username}
-          weeklyFocusTime={totalWeeklyMinutes}
-          focusPoints={focusPoints}
-        />
-      )}
+      <Navigation
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        username={username}
+        onLogout={handleLogout}
+      />
 
-      {activeTab === 'timer' && (
-        <PomodoroTimer
-          onFocusComplete={handleFocusComplete}
-          activeTask={activeTask?.title || null}
-        />
-      )}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        {activeTab === 'home' && (
+          <Dashboard
+            username={username}
+            weeklyFocusTime={totalWeeklyMinutes}
+            focusPoints={focusPoints}
+          />
+        )}
 
-      {activeTab === 'tasks' && (
-        <TaskManager
-          tasks={tasks}
-          onAddTask={handleAddTask}
-          onEditTask={handleEditTask}
-          onDeleteTask={handleDeleteTask}
-          activeTaskId={activeTaskId}
-          onSetActiveTask={setActiveTaskId}
-        />
-      )}
+        {activeTab === 'timer' && (
+          <PomodoroTimer
+            onFocusComplete={handleFocusComplete}
+            activeTask={activeTask?.title || null}
+          />
+        )}
 
-      {activeTab === 'statistics' && (
-        <Statistics
-          weeklyData={weeklyData}
-          totalWeeklyMinutes={totalWeeklyMinutes}
-          completedTasks={completedTasks}
-        />
-      )}
+        {activeTab === 'tasks' && (
+          <TaskManager
+            tasks={tasks}
+            onAddTask={handleAddTask}
+            onEditTask={handleEditTask}
+            onDeleteTask={handleDeleteTask}
+            activeTaskId={activeTaskId}
+            onSetActiveTask={setActiveTaskId}
+          />
+        )}
 
-      {activeTab === 'leaderboard' && (
-        <Leaderboard
-          currentUser={username}
-          leaderboardData={getLeaderboardData()}
-        />
-      )}
-    </main>
+        {activeTab === 'statistics' && (
+          <Statistics
+            weeklyData={weeklyData}
+            totalWeeklyMinutes={totalWeeklyMinutes}
+            completedTasks={completedTasks}
+          />
+        )}
 
-    <Footer
-      activeTab={activeTab}
-      onTabChange={setActiveTab}
-    />
-  </div>
-);
+        {activeTab === 'leaderboard' && (
+          <Leaderboard
+            currentUser={username}
+            leaderboardData={getLeaderboardData()}
+          />
+        )}
+      </main>
+
+      <Footer
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+      />
+    </div>
+  );
 }
