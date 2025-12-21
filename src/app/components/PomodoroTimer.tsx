@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, RotateCcw, Settings } from 'lucide-react';
-import SoundAlarm from '../../. ./public/sounds/alarm.mp3';
+import SoundAlarm from '../../../public/sounds/alarm.mp3';
 
 interface PomodoroTimerProps {
   onFocusComplete: (minutes: number) => void;
